@@ -6,44 +6,44 @@ export default class Root extends React.Component {
     super(props)
 
     this.state = {
-      message: 'When Angular receives message, we should see a confirmation here 😎'
+      name:"",
+      password:"",
+      display: true
     }
-
-    this.messageHandler = this.messageHandler.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+    this.sendMessage = this.sendMessage.bind(this)
   }
 
-  componentDidMount() {
-    e.on('received', this.messageHandler)
+  handleChange(e){
+    this.setState({[e.target.name]: e.target.value})
   }
 
-  componentDidUnmount() {
-    e.off('received', this.messageHandler)
-  }
-
-  messageHandler(message) {
-    this.setState({
-      message: message.text
-    })
-  }
-
-  sendMessage() {
-    e.emit('message', { text: 'Hello from React 👋' })
+  sendMessage(){
+    e.emit('message', { text: 'loggedIn' })
+    this.setState({display: false});
   }
 
   render() {
     return (
       <div style={{marginTop: '10px'}}>
-        <h1>This was written in React</h1>
+       {this.state.display &&
+        <div>
+        <h1>Sign in</h1>
 
         <p>
+          <div>
+            Name: <input type="text" name="name" value={this.state.name} onChange={this.handleChange}/>
+          </div>
+          <div>
+            Password: <input type="text" name="password" value={this.state.password} onChange={this.handleChange}/>
+          </div>
+
           <button onClick={this.sendMessage}>
-            Send a message to Angular
+            Login
           </button>
         </p>
-
-        <p>
-          {this.state.message}
-        </p>
+        </div>
+        }
       </div>
     )
   }
